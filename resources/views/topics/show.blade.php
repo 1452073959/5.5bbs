@@ -11,7 +11,32 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="text-center">
-                        作者：{{ $topic->user->name }}
+                        <a href="{{ route('users.show', [$topic->user_id]) }}" title="{{ $topic->user->name }}">
+
+                            作者：{{ $topic->user->name }}
+                        </a>
+                    </div>
+                    <div class="text-center">
+
+                        @if (Auth::check())
+                            @if ($topic->user->id !== Auth::user()->id)
+                                <div id="follow_form" style="display: inline-block">
+                                    @if (Auth::user()->isFollowing($topic->user->id))
+                                        <form action="{{ route('followers.destroy', $topic->user->id) }}" method="post">
+                                            {{ csrf_field() }}
+                                            {{ method_field('DELETE') }}
+                                            <button type="submit" class="btn btn-sm">取消关注</button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('followers.store', $topic->user->id) }}" method="post">
+                                            {{ csrf_field() }}
+                                            <button type="submit" class="btn btn-sm btn-primary">关注</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            @endif
+                        @endif
+
                     </div>
                     <hr>
                     <div class="media">
