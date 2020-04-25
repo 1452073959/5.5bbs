@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use App\Models\Category;
 use Auth;
+use Illuminate\Support\Facades\Redirect;
 use App\Handlers\ImageUploadHandler;
 use App\Models\User;
 use App\Models\Link;
@@ -78,8 +79,9 @@ class TopicsController extends Controller
     {
         $this->authorize('destroy', $topic);
         $topic->delete();
-
-        return redirect()->to($topic->link())->with('message', '删除成功');
+//        $user=Auth();
+//        return Redirect::back();
+        return redirect()->route('users.show', Auth::id())->with('success', '成功删除！');
     }
 
     public function uploadImage(Request $request, ImageUploadHandler $uploader)
